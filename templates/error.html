@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="background-color:#dcebf5;">
+    <div class="container mt-5 p-4 bg-white rounded text-center">
+        <h1>Error {{ code }}</h1>
+        <p>{{ message }}</p>
+        <a class="btn btn-primary" href="{{ url_for('web.home') }}">Back to Home</a>
+    </div>
+</body>
+</html>

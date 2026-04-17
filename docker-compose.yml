@@ -1,0 +1,23 @@
+version: '3.8' # Версия Docker Compose
+services: # Сервисы, которые будут запущены
+  db: # Первый сервис (база PostgreSQL)
+    image: postgres:12.8 # Образ Docker для этого сервиса
+    volumes: # Что подключается (mount) к сервису
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql # Подключает init.sql в папку инициализации PostgreSQL
+      - dbdata:/var/lib/postgresql/data # Именованный том dbdata подключается к каталогу данных контейнера
+    environment: # Переменные окружения сервиса
+      POSTGRES_PASSWORD: qwerty123 # Пароль для PostgreSQL
+    healthcheck: # Healthcheck для проверки готовности сервиса
+      test: ["CMD-SHELL", "pg_isready -U postgres"] # Команда проверки готовности PostgreSQL
+      interval: 10s # Проверка выполняется каждые 10 секунд
+      timeout: 5s # Если проверка длится больше 5 секунд, считается ошибкой
+      retries: 5 # Количество попыток проверки до статуса unhealthy
+  app: # Второй сервис (Flask-приложение)
+    build: . # Сборка из Dockerfile текущей папки
+    ports: # Публикация порта контейнера на хост
+      - "5000:5000" # Проброс порта 5000: хост -> контейнер
+    depends_on: # Зависимости сервиса
+      db: # Flask-сервис зависит от сервиса db
+        condition: service_healthy # Flask стартует только после готовности db
+volumes: # Именованные тома
+  dbdata: # Том для сохранения данных между перезапусками

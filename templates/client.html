@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Client Portal</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="background-color:#dcebf5;">
+    <nav class="navbar navbar-expand-lg" style="background-color:#ffffff;">
+        <a class="navbar-brand" href="{{ url_for('web.home') }}">HelpDesk</a>
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{{ url_for('web.client_page') }}">Client</a>
+            <a class="nav-item nav-link" href="/api/docs/" target="_blank">Swagger API</a>
+            <a class="nav-item nav-link" href="{{ url_for('web.account') }}">Account</a>
+        </div>
+    </nav>
+    <div class="container mt-4 p-4 bg-white rounded">
+        <h2>Client Issue Management</h2>
+        <p class="text-muted">This page uses JavaScript and REST API for client-side logic.</p>
+
+        <div id="employee-form" class="mb-3" {% if user_type != "employee" %}style="display:none"{% endif %}>
+            <h5>Create Issue</h5>
+            <input id="issue-category" class="form-control mb-2" placeholder="Category">
+            <input id="issue-description" class="form-control mb-2" placeholder="Description">
+            <button id="create-issue-btn" class="btn btn-primary">Create via API</button>
+        </div>
+
+        <button id="refresh-issues-btn" class="btn btn-info mb-3">Refresh Issues</button>
+        <div id="message-box"></div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Reporter</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody id="issues-body"></tbody>
+        </table>
+    </div>
+    <script src="{{ url_for('static', filename='js/client.js') }}"></script>
+</body>
+</html>
