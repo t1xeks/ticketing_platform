@@ -26,3 +26,8 @@ support получает все заявки.
 POST /api/issues:
 разрешен только employee;
 для support возвращается ошибка авторизации.
+
+
+cd "C:\*\*\*\ticketing_platform"
+>> $env:DATABASE_URL="postgresql://ticketing_user:qwerty123@localhost:5432/ticketing_system"
+>> .\.venv\Scripts\python.exe app.py
