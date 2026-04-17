@@ -24,9 +24,9 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand">
         <a class="navbar-brand" href="{{ url_for('web.home') }}">HelpDesk</a>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 {% if user_type == "employee" %}
                     <a class="nav-item nav-link" href="{{ url_for('web.my_issues') }}">My Issues</a>

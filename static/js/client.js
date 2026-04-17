@@ -5,7 +5,7 @@ async function requestJSON(url, options = {}) {
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(data.error || "API request failed");
+    throw new Error(data.error || `API request failed (HTTP ${response.status})`);
   }
   return data;
 }

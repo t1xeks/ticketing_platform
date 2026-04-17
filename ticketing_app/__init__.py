@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from flask import Flask
 from werkzeug.security import generate_password_hash
 
@@ -10,21 +12,23 @@ from ticketing_app.web.routes import web_bp
 
 
 def create_app():
-    app = Flask(__name__)
+    project_root = Path(__file__).resolve().parent.parent
+    app = Flask(
+        __name__,
+        template_folder=str(project_root / "templates"),
+        static_folder=str(project_root / "static"),
+    )
     app.config.from_object(Config)
 
     db.init_app(app)
     login_manager.init_app(app)
     csrf.init_app(app)
-    swagger.init_app(
-        app,
-        config={
-            "headers": [],
-            "specs": [{"endpoint": "apispec_1", "route": "/apispec_1.json", "rule_filter": lambda rule: True, "model_filter": lambda tag: True}],
-            "swagger_ui": True,
-            "specs_route": "/api/docs/",
-        },
-    )
+    app.config["SWAGGER"] = {
+        "title": "Ticketing Platform API",
+        "uiversion": 3,
+        "specs_route": "/api/docs/",
+    }
+    swagger.init_app(app)
     # Ensure Swagger does not alter default Jinja delimiters for regular templates.
     app.jinja_env.variable_start_string = "{{"
     app.jinja_env.variable_end_string = "}}"
@@ -36,6 +40,7 @@ def create_app():
 
     app.register_blueprint(web_bp)
     app.register_blueprint(api_bp)
+    csrf.exempt(api_bp)
     register_error_handlers(app)
 
     @login_manager.user_loader
