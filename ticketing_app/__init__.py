@@ -25,6 +25,13 @@ def create_app():
             "specs_route": "/api/docs/",
         },
     )
+    # Ensure Swagger does not alter default Jinja delimiters for regular templates.
+    app.jinja_env.variable_start_string = "{{"
+    app.jinja_env.variable_end_string = "}}"
+    app.jinja_env.block_start_string = "{%"
+    app.jinja_env.block_end_string = "%}"
+    app.jinja_env.comment_start_string = "{#"
+    app.jinja_env.comment_end_string = "#}"
     login_manager.login_view = "web.login"
 
     app.register_blueprint(web_bp)
